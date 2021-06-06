@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 875, y: 300}
+  m_MinSize: {x: 875, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
@@ -112,10 +112,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 881, y: 492}
-  m_MaxSize: {x: 16006, y: 14042}
+  m_MinSize: {x: 878, y: 492}
+  m_MaxSize: {x: 16003, y: 14042}
   vertical: 0
-  controlID: 154
+  controlID: 135
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -137,10 +137,10 @@ MonoBehaviour:
     y: 0
     width: 1508
     height: 947
-  m_MinSize: {x: 605, y: 492}
-  m_MaxSize: {x: 12005, y: 14042}
+  m_MinSize: {x: 603, y: 492}
+  m_MaxSize: {x: 12003, y: 14042}
   vertical: 1
-  controlID: 83
+  controlID: 136
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -163,10 +163,10 @@ MonoBehaviour:
     y: 0
     width: 1508
     height: 594
-  m_MinSize: {x: 605, y: 221}
-  m_MaxSize: {x: 12005, y: 4021}
+  m_MinSize: {x: 603, y: 221}
+  m_MaxSize: {x: 12003, y: 4021}
   vertical: 0
-  controlID: 84
+  controlID: 137
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -186,8 +186,8 @@ MonoBehaviour:
     y: 0
     width: 289
     height: 594
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -420,8 +420,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: a0330000
-      m_LastClickedID: 0
+      m_SelectedIDs: fe3d0000
+      m_LastClickedID: 15870
       m_ExpandedIDs: 66fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -482,9 +482,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 5.812798, y: 165.79419, z: 59.985928}
+    m_Target: {x: 4.080778, y: 165.91026, z: 60.312485}
     speed: 2
-    m_Value: {x: 5.812798, y: 165.79419, z: 59.985928}
+    m_Value: {x: 4.080778, y: 165.91026, z: 60.312485}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 2
@@ -530,13 +530,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Target: {x: 0.5504466, y: 0.0037529324, z: -0.0024849027, w: 0.8348731}
     speed: 2
-    m_Value: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Value: {x: 0.55043983, y: 0.0037528859, z: -0.002484872, w: 0.8348627}
   m_Size:
-    m_Target: 5.5399466
+    m_Target: 3.4399457
     speed: 2
-    m_Value: 5.5399466
+    m_Value: 3.4399457
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -632,7 +632,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/CuttingScripts
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: E:\MRes\Individual Project\VR-Obstetrics-Simulation\simulation_demo
+  m_LastProjectPath: E:\MRes\Individual Project\Obstetric-mesh-cutting-VRSimulation\simulation_demo
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:

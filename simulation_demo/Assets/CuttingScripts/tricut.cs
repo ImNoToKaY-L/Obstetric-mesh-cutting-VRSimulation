@@ -14,7 +14,7 @@ public class tricut : MonoBehaviour
     private Vector3 incisionEnd;
     private List<int> relatedTri;
     public GameObject sphere;
-    public float incisionDepth = 0.5f;
+    public float incisionDepth = 3f;
 
     private int prevHitTri;
     private List<Vector3> expandingDirections = new List<Vector3>();
@@ -130,27 +130,23 @@ public class tricut : MonoBehaviour
     }
 
 
-    private void IncisionCreationTest(Vector3 startPoint, Vector3 endPoint, int index, int IV, int GV1, int GV2, int spOrder, int epOrder)
+    private void IncisionCreationTest(int[] originalTri, Vector3[] vertices, Vector3 startPoint, Vector3 endPoint, int index, int IV, int GV1, int GV2, int spOrder, int epOrder, out Vector3[] newvertices, out int[] newTriangles)
     {
-        Destroy(this.gameObject.GetComponent<MeshCollider>());
-        Mesh mesh = transform.GetComponent<MeshFilter>().mesh;
-        int[] originalTri = mesh.triangles;
-        int[] newTri = new int[mesh.triangles.Length + 6];
-        Vector3[] newVert = new Vector3[mesh.vertices.Length + 4];
+
+        int[] newTri = new int[originalTri.Length + 18];
+        Vector3[] newVert = new Vector3[vertices.Length + 6];
 
 
-        Vector3[] vertices = mesh.vertices;
 
-
-        Array.Copy(mesh.vertices, newVert, mesh.vertices.Length);
-        newVert[mesh.vertices.Length] = startPoint;
-        newVert[mesh.vertices.Length + 1] = endPoint;
-        newVert[mesh.vertices.Length + 2] = startPoint;
-        newVert[mesh.vertices.Length + 3] = endPoint;
-        int intersect1 = spOrder == 1 ? mesh.vertices.Length : mesh.vertices.Length + 1;
-        int intersect2 = spOrder == 1 ? mesh.vertices.Length + 1 : mesh.vertices.Length;
-        int intersect3 = spOrder == 1 ? mesh.vertices.Length + 2 : mesh.vertices.Length + 3;
-        int intersect4 = spOrder == 1 ? mesh.vertices.Length + 3 : mesh.vertices.Length + 2;
+        Array.Copy(vertices, newVert, vertices.Length);
+        newVert[vertices.Length] = startPoint;
+        newVert[vertices.Length + 1] = endPoint;
+        newVert[vertices.Length + 2] = startPoint;
+        newVert[vertices.Length + 3] = endPoint;
+        int intersect1 = spOrder == 1 ? vertices.Length : vertices.Length + 1;
+        int intersect2 = spOrder == 1 ? vertices.Length + 1 : vertices.Length;
+        int intersect3 = spOrder == 1 ? vertices.Length + 2 : vertices.Length + 3;
+        int intersect4 = spOrder == 1 ? vertices.Length + 3 : vertices.Length + 2;
 
 
         Vector3 projectedPoint;
@@ -160,7 +156,9 @@ public class tricut : MonoBehaviour
         newTri[index * 3 + 2] = intersect2;
 
         projectedPoint = Vector3.Project((newVert[IV] - newVert[intersect1]), (newVert[intersect2] - newVert[intersect1]));
-        expandingDirections.Add((newVert[IV]-projectedPoint).normalized);
+        expandingDirections.Add((newVert[IV] - projectedPoint).normalized);
+
+
         newTri[index * 3 + 3] = GV1;
         newTri[index * 3 + 4] = GV2;
         newTri[index * 3 + 5] = intersect4;
@@ -169,25 +167,39 @@ public class tricut : MonoBehaviour
         newTri[index * 3 + 7] = intersect3;
         newTri[index * 3 + 8] = GV1;
 
-        expandingDirections.Add(-1*(newVert[IV] - projectedPoint).normalized);
+        Vector3 BV1 = newVert[intersect1] + new Vector3(0f, -incisionDepth,0f);
+        Vector3 BV2 = newVert[intersect2] + new Vector3(0f, -incisionDepth,0f);
+        newVert[vertices.Length + 4] = BV1;
+        newVert[vertices.Length + 5] = BV2;
+        int B1 = vertices.Length + 4;
+        int B2 = vertices.Length + 5;
 
 
-        Array.Copy(originalTri, (index + 1) * 3, newTri, index * 3 + 9, originalTri.Length - index * 3 - 3);
+        newTri[index * 3 + 9] = intersect3;
+        newTri[index * 3 + 10] = B2;
+        newTri[index * 3 + 11] = B1;
 
-        Vector2[] uvs = new Vector2[newVert.Length];
+        newTri[index * 3 + 18] = intersect3;
+        newTri[index * 3 + 19] = intersect4;
+        newTri[index * 3 + 20] = B2;
 
-        for (int i = 0; i < uvs.Length; i++)
-        {
-            uvs[i] = new Vector2(newVert[i].x, newVert[i].z);
-        }
 
-        transform.GetComponent<MeshFilter>().mesh.vertices = newVert;
-        transform.GetComponent<MeshFilter>().mesh.uv = uvs;
+        newTri[index * 3 + 12] = intersect1;
+        newTri[index * 3 + 13] = B1;
+        newTri[index * 3 + 14] = B2;
 
-        transform.GetComponent<MeshFilter>().mesh.triangles = newTri;
-        mesh.RecalculateNormals();
 
-        this.gameObject.AddComponent<MeshCollider>();
+        newTri[index * 3 + 15] = intersect2;
+        newTri[index * 3 + 16] = intersect1;
+        newTri[index * 3 + 17] = B2;
+
+        expandingDirections.Add(-1 * (newVert[IV] - projectedPoint).normalized);
+
+
+        Array.Copy(originalTri, (index + 1) * 3, newTri, (index+7)*3, originalTri.Length -((index+1) * 3));
+        newvertices = newVert;
+        newTriangles = newTri;
+
     }
 
 
@@ -342,7 +354,9 @@ public class tricut : MonoBehaviour
                 Debug.LogError("None of the cases are triggered, current sum: "+ sum);
                 break;
         }
-        IncisionCreation(tri,vertices,startPoint, endPoint, index, individualVert, groupedVert1, groupedVert2, startOrder, endOrder,out newvertices,out newTriangles);
+        //IncisionCreation(tri,vertices,startPoint, endPoint, index, individualVert, groupedVert1, groupedVert2, startOrder, endOrder,out newvertices,out newTriangles);
+        IncisionCreationTest(tri, vertices, startPoint, endPoint, index, individualVert, groupedVert1, groupedVert2, startOrder, endOrder, out newvertices, out newTriangles);
+
 
     }
 
@@ -384,8 +398,6 @@ public class tricut : MonoBehaviour
             intersectCount++;
             tempInter = Intersection;
         }
-
-
 
 
         if (segIntersection(out Intersection, incisionStart, incisionEnd, v2 + transform.position, v3 + transform.position))
@@ -546,16 +558,16 @@ public class tricut : MonoBehaviour
             incisionStart = hit.point;
             isCapturingMovement = true;
         }
-        if (Input.GetMouseButtonDown(1))
-        {
-            RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 1000.0f))
-            {
-                Debug.Log("Current index: " + hit.triangleIndex);
-            }
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    RaycastHit hit;
+        //    Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        //    if (Physics.Raycast(ray, out hit, 1000.0f))
+        //    {
+        //        Debug.Log("Current index: " + hit.triangleIndex);
+        //    }
 
-        }
+        //}
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -629,7 +641,7 @@ public class tricut : MonoBehaviour
 
                     for (int i = 0; i < cuttedIndices.Count; i++)
                     {
-                        cuttedIndices[i] += i * 2;
+                        cuttedIndices[i] += i * 6;
                         Debug.Log("Now operating: " + cuttedIndices[i]);
 
                         VerticesCut(originalTri, verts, incisionStart - this.transform.position, incisionEnd - this.transform.position, cuttedIndices[i],out verts,out originalTri);
@@ -639,9 +651,6 @@ public class tricut : MonoBehaviour
                     relatedTri.Clear();
                     isUpdating = true;
                 }
-
-
-
 
             }
 
