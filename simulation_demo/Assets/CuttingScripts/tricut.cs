@@ -17,10 +17,20 @@ public class tricut : MonoBehaviour
     public float incisionDepth = 3f;
 
     private int prevHitTri;
-    private List<Vector3> expandingDirections = new List<Vector3>();
+    private List<VertMovement> expandingDirections = new List<VertMovement>();
     private int originalVertLength;
 
 
+    private class VertMovement
+    {
+        public int vertIndex;
+        public Vector3 direction;
+        public VertMovement(int index,Vector3 dir)
+        {
+            vertIndex = index;
+            direction = dir;
+        }
+    }
 
 
 
@@ -28,6 +38,7 @@ public class tricut : MonoBehaviour
     {
         relatedTri = new List<int>();
         originalVertLength = transform.GetComponent<MeshFilter>().mesh.vertexCount;
+
     }
 
 
@@ -102,15 +113,10 @@ public class tricut : MonoBehaviour
         int intersect4 = spOrder == 1 ? vertices.Length + 3 : vertices.Length + 2;
 
 
-        Vector3 projectedPoint;
         Array.Copy(originalTri, newTri, index * 3);
         newTri[index * 3] = IV;
         newTri[index * 3 + 1] = intersect1;
         newTri[index * 3 + 2] = intersect2;
-
-        projectedPoint = Vector3.Project((newVert[IV] - newVert[intersect1]), (newVert[intersect2] - newVert[intersect1]));
-        expandingDirections.Add((newVert[IV] - projectedPoint).normalized);
-
 
         newTri[index * 3 + 3] = GV1;
         newTri[index * 3 + 4] = GV2;
@@ -119,8 +125,10 @@ public class tricut : MonoBehaviour
         newTri[index * 3 + 6] = intersect4;
         newTri[index * 3 + 7] = intersect3;
         newTri[index * 3 + 8] = GV1;
-
-        expandingDirections.Add(-1 * (newVert[IV] - projectedPoint).normalized);
+        expandingDirections.Add(new VertMovement(intersect1,newVert[IV] - newVert[intersect1]));
+        expandingDirections.Add(new VertMovement(intersect2, newVert[IV] - newVert[intersect2]));
+        expandingDirections.Add(new VertMovement(intersect3, newVert[GV1] - newVert[intersect3]));
+        expandingDirections.Add(new VertMovement(intersect4, newVert[GV2] - newVert[intersect4]));
 
 
         Array.Copy(originalTri, (index + 1) * 3, newTri, index * 3 + 9, originalTri.Length - index * 3 - 3);
@@ -156,7 +164,6 @@ public class tricut : MonoBehaviour
         newTri[index * 3 + 2] = intersect2;
 
         projectedPoint = Vector3.Project((newVert[IV] - newVert[intersect1]), (newVert[intersect2] - newVert[intersect1]));
-        expandingDirections.Add((newVert[IV] - projectedPoint).normalized);
 
 
         newTri[index * 3 + 3] = GV1;
@@ -174,27 +181,33 @@ public class tricut : MonoBehaviour
         int B1 = vertices.Length + 4;
         int B2 = vertices.Length + 5;
 
+        //subtri = new int[12];
+        //int counter = 0;
 
         newTri[index * 3 + 9] = intersect3;
         newTri[index * 3 + 10] = B2;
         newTri[index * 3 + 11] = B1;
-
-        newTri[index * 3 + 18] = intersect3;
-        newTri[index * 3 + 19] = intersect4;
-        newTri[index * 3 + 20] = B2;
-
-
-        newTri[index * 3 + 12] = intersect1;
-        newTri[index * 3 + 13] = B1;
+        
+        newTri[index * 3 + 12] = intersect3;
+        newTri[index * 3 + 13] = intersect4;
         newTri[index * 3 + 14] = B2;
 
-
-        newTri[index * 3 + 15] = intersect2;
-        newTri[index * 3 + 16] = intersect1;
+        newTri[index * 3 + 15] = intersect1;
+        newTri[index * 3 + 16] = B1;
         newTri[index * 3 + 17] = B2;
 
-        expandingDirections.Add(-1 * (newVert[IV] - projectedPoint).normalized);
+        newTri[index * 3 + 18] = intersect2;
+        newTri[index * 3 + 19] = intersect1;
+        newTri[index * 3 + 20] = B2;
+        //int[] addup = new int[subtri.Length + submesh.Length];
+        //Array.Copy(submesh, addup, submesh.Length);
+        //Array.Copy(subtri, 0, addup, submesh.Length, subtri.Length);
+        //subtri = addup;
 
+        expandingDirections.Add(new VertMovement(intersect1, newVert[IV] - newVert[intersect1]));
+        expandingDirections.Add(new VertMovement(intersect2, newVert[IV] - newVert[intersect2]));
+        expandingDirections.Add(new VertMovement(intersect3, newVert[GV1] - newVert[intersect3]));
+        expandingDirections.Add(new VertMovement(intersect4, newVert[GV2] - newVert[intersect4]));
 
         Array.Copy(originalTri, (index + 1) * 3, newTri, (index+7)*3, originalTri.Length -((index+1) * 3));
         newvertices = newVert;
@@ -467,31 +480,25 @@ public class tricut : MonoBehaviour
 
         //}
 
-        //if (Input.GetMouseButton(1))
-        //{
-        //    Destroy(this.gameObject.GetComponent<MeshCollider>());
+        if (Input.GetMouseButton(1))
+        {
+            Destroy(this.gameObject.GetComponent<MeshCollider>());
 
-        //    Mesh currentmesh = transform.GetComponent<MeshFilter>().mesh;
-        //    Vector3[] currentvert = currentmesh.vertices;
-        //    int flag = -1;
-        //    for (int i = 0; i < expandingDirections.Count / 2; i++)
-        //    {
-        //        currentvert[originalVertLength + i * 4] += new Vector3(0, 0, -flag) * 0.01f;
-        //        currentvert[originalVertLength + i * 4 + 1] += new Vector3(0, 0, -flag) * 0.01f;
-        //        currentvert[originalVertLength + i * 4 + 2] += new Vector3(0, 0, flag) * 0.01f;
-        //        currentvert[originalVertLength + i * 4 + 3] += new Vector3(0, 0, flag) * 0.01f;
+            Mesh currentmesh = transform.GetComponent<MeshFilter>().mesh;
+            Vector3[] currentvert = currentmesh.vertices;
+            for (int i = 0; i < expandingDirections.Count; i++)
+            {
+                currentvert[expandingDirections[i].vertIndex] += expandingDirections[i].direction.normalized * 0.02f;
 
-        //        flag = -flag;
-
-        //    }
+            }
 
 
-        //    transform.GetComponent<MeshFilter>().mesh.vertices = currentvert;
+            transform.GetComponent<MeshFilter>().mesh.vertices = currentvert;
 
-        //    mesh.RecalculateNormals();
+            mesh.RecalculateNormals();
 
-        //    this.gameObject.AddComponent<MeshCollider>();
-        //}
+            this.gameObject.AddComponent<MeshCollider>();
+        }
 
 
         //if (isCapturingMovement)
@@ -641,7 +648,9 @@ public class tricut : MonoBehaviour
 
                     for (int i = 0; i < cuttedIndices.Count; i++)
                     {
+                        //cuttedIndices[i] += i * 2;
                         cuttedIndices[i] += i * 6;
+
                         Debug.Log("Now operating: " + cuttedIndices[i]);
 
                         VerticesCut(originalTri, verts, incisionStart - this.transform.position, incisionEnd - this.transform.position, cuttedIndices[i],out verts,out originalTri);

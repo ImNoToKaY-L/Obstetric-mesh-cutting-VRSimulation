@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028377, g: 0.22571409, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -308,7 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 1307033019}
   sphere: {fileID: 1854704576186534, guid: 4af9c12d099da674c8974b64d5785fe9, type: 3}
-  incisionWidth: 0.005
+  incisionDepth: 1
 --- !u!1 &77534889
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,14 +1137,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355458516}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cbb4b6766a2df249b5d5609685fb20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1307033019}
   sphere: {fileID: 1854704576186534, guid: 4af9c12d099da674c8974b64d5785fe9, type: 3}
-  incisionWidth: 0.005
+  incisionDepth: 3
 --- !u!114 &355458521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2152,7 +2152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &745100998
 Light:
   m_ObjectHideFlags: 0
@@ -2274,7 +2274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &756751237
 Transform:
   m_ObjectHideFlags: 0
@@ -2282,15 +2282,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756751236}
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 5.95, y: 193.87, z: 62.3}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalRotation: {x: 0.9046437, y: -0, z: -0, w: -0.4261687}
+  m_LocalPosition: {x: 6.11, y: 170.33377, z: 68.26547}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 1570807197}
   - {fileID: 1889099253}
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 230.449, y: 0, z: 0}
 --- !u!1 &760072667
 GameObject:
   m_ObjectHideFlags: 0
@@ -3724,7 +3724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 1307033019}
   sphere: {fileID: 1854704576186534, guid: 4af9c12d099da674c8974b64d5785fe9, type: 3}
-  incisionWidth: 0.005
+  incisionDepth: 3
 --- !u!114 &1271163364
 MonoBehaviour:
   m_ObjectHideFlags: 0
